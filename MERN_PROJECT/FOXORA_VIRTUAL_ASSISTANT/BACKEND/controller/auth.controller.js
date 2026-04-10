@@ -17,7 +17,9 @@ export const signup =AsyncHandler(async(req,res)=>{
     if(existemail){
         throw new ApiError(400,"Email exist")
     }
-
+  if(password.length<6){
+    throw new ApiError(400,"Password must be 6 character")
+  }
     // hash password
     const hashpassword=await bcrypt.hash(password,10)
     const newuser= await User.create({
@@ -28,7 +30,7 @@ export const signup =AsyncHandler(async(req,res)=>{
     const token=gentoken(newuser._id);
     res.cookie("token",token,{
         httpOnly:true,
-        secure:true,
+         secure: process.env.NODE_ENV === "production",
         sameSite:"strict",
         maxAge:2*24*60*60*1000
 
@@ -56,16 +58,16 @@ export const login =AsyncHandler(async(req,res)=>{
         throw new ApiError(401,"Invalid Credentials")
     }
     
-    const token=gentoken(newuser._id);
+    const token=gentoken(existUser._id);
     res.cookie("token",token,{
         httpOnly:true,
-        secure:true,
+         secure: process.env.NODE_ENV === "production",
         sameSite:"strict",
         maxAge:2*24*60*60*1000
 
     })
     return res.status(200).json(
-        new ApiResponse(200, newuser, "User login successfully") 
+        new ApiResponse(200, existUser, "User login successfully") 
     )
 })
 
@@ -74,7 +76,7 @@ export const logout =AsyncHandler(async(req,res)=>{
     res.cookie("token","",{
         httpOnly:true,
         sameSite:"strict",
-        secure:true
+         secure: process.env.NODE_ENV === "production",
     })
     return res.status(200).json(
         new ApiResponse(200, null, "User logout successfully") 
