@@ -1,11 +1,11 @@
 // multiplication of matrix
 
-#include<iostreaam>
+#include<iostream>
 using namespace std;
 int main(){
     cout<<"enter matrix 1:";
     int arr1[3][2];
-    int arr1[2][3];
+    int arr2[2][3];
  for(int i=0;i<3;i++){
     for(int j=0;j<2;j++){
         cin>>arr1[i][j];
@@ -20,7 +20,15 @@ int main(){
  int res[3][3];
  for(int i=0;i<3;i++){
     for(int j=0;j<3;j++){
-        res[i][j]=arr1[i][j]*arr2[j][i];
+              res[i][j] = 0;  // ✅ initialize
+        for(int k=0;k<2;k++)
+        res[i][j]+=arr1[i][k]*arr2[k][j];
     }
+ }
+ for(int i=0;i<3;i++){
+    for(int j=0;j<3;j++){
+        cout<<res[i][j]<<" ";
+    }
+    cout<<endl;
  }
 }

@@ -9,10 +9,10 @@ timer=setTimeout(()=>{
 }
 }
  const  handler =async(e)=>{
-    const res=await fetch(`https://dummyjson.com/products/${e.target.value}`)
+    const res=await fetch(`https://dummyjson.com/products/search?q=${e.target.value}`)
     const data=await res.json()
     console.log(data.products)
-       
+       console.log("Value:", e.target.value);
  }
  const debounced=debounce(handler,1000)
 input.addEventListener("input",debounced)
